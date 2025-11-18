@@ -9,6 +9,7 @@ env:
   GIT_COMMIT: ${{ github.sha }}
   GIT_BRANCH: ${{ github.ref_name }}
   GIT_REPO: ${{ github.repository }}
+  CHART_PATH: my-helm-chart
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -48,3 +49,29 @@ jobs:
           docker build -t demo-k3s-argo-paratech .
           docker tag demo-k3s-argo-paratech:latest 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
           docker push 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
+  
+
+
+#    IMAGE_TAG=${{ env.branch_name }}-${{ env.full_sha }}
+#    CHART_PATH=helm/demo-k3s-argo-paratech   # adjust path if needed
+#
+#    sed -i "s|repository: .*|repository: 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech|g" $CHART_PATH/values.yaml
+#    sed -i "s|tag: .*|tag: $IMAGE_TAG|g" $CHART_PATH/values.yaml
+  update_helm:
+    runs-on: ubuntu-latest
+    steps:
+        ############ checkout the code ######################
+      - name: checkout the code
+        uses: actions/checkout@v4
+
+
+      - name: update helm chart
+        run: |
+          IMAGE_TAG=${{ env.branch_name }}-${{ env.full_sha }}
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          sed -i "s|repository: .*|repository: 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech|g" $CHART_PATH/values.yaml
+          sed -i "s|tag: .*|tag: $IMAGE_TAG|g" $CHART_PATH/values.yaml
+          git add .
+          git commit -m "Update Helm chart with image tag ${{ env.branch_name }}-${{ env.full_sha }}" || echo "No changes to commit"
+          git push origin ${{ github.ref_name }}
