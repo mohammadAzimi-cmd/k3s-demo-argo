@@ -63,7 +63,7 @@ jobs:
 #    sed -i "s|repository: .*|repository: 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech|g" $CHART_PATH/values.yaml
 #    sed -i "s|tag: .*|tag: $IMAGE_TAG|g" $CHART_PATH/values.yaml
   update_helm:
-#    needs: build_docker_image
+    needs: build_docker_image
     runs-on: ubuntu-latest
     steps:
         ############ checkout the code ######################
