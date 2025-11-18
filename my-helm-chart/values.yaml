@@ -7,14 +7,15 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: nginx
+  repository: 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: test-3844f7d1a29b9d1e8eac553cdd3d54fef7a4b698
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
+imagePullSecrets:
+  - name: ecr-creds
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
