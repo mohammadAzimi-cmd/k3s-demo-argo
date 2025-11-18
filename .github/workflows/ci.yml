@@ -58,6 +58,7 @@ jobs:
 #    sed -i "s|repository: .*|repository: 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech|g" $CHART_PATH/values.yaml
 #    sed -i "s|tag: .*|tag: $IMAGE_TAG|g" $CHART_PATH/values.yaml
   update_helm:
+    needs: build_docker_image
     runs-on: ubuntu-latest
     steps:
         ############ checkout the code ######################
@@ -73,5 +74,5 @@ jobs:
           sed -i "s|repository: .*|repository: 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech|g" $CHART_PATH/values.yaml
           sed -i "s|tag: .*|tag: $IMAGE_TAG|g" $CHART_PATH/values.yaml
           git add .
-          git commit -m "Update Helm chart with image tag ${{ env.branch_name }}-${{ env.full_sha }}" || echo "No changes to commit"
-          git push origin ${{ github.ref_name }}
+          git commit -m "Update Helm chart with image tag $IMAGE_TAG" || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
