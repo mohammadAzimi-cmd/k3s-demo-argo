@@ -14,7 +14,8 @@ image:
   tag: test-38735cc5a095ec652a3ef9e159984fd4673dd601
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
+imagePullSecrets:
+  - name: ecr-creds
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
