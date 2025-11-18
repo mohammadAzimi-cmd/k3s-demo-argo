@@ -42,6 +42,5 @@ jobs:
       - name: build docker image and push it gcr
         run: |
           ls -ll
-          ls -R integrations
           docker build -t demo-k3s-argo-paratech .
           docker tag demo-k3s-argo-paratech:latest 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
