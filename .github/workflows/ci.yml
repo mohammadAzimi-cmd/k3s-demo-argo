@@ -44,3 +44,4 @@ jobs:
           ls -ll
           docker build -t demo-k3s-argo-paratech .
           docker tag demo-k3s-argo-paratech:latest 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
+          docker push 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
