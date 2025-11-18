@@ -17,40 +17,40 @@ concurrency:
 
 jobs:
   ################ building docker image ####################
-  build_docker_image:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-        ############ checkout the code ######################
-      - name: checkout the code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-
-
-      - name: Test ECR access
-        run: |
-          echo "Testing login to AWS ECR..."
-          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 381492032953.dkr.ecr.us-west-2.amazonaws.com
-
-
-      - name: build docker image and push it gcr
-        run: |
-          ls -ll
-          docker build -t demo-k3s-argo-paratech .
-          docker tag demo-k3s-argo-paratech:latest 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
-          docker push 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
-  
-
+#  build_docker_image:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      packages: write
+#
+#    steps:
+#        ############ checkout the code ######################
+#      - name: checkout the code
+#        uses: actions/checkout@v4
+#
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: us-east-1
+#
+#
+#
+#      - name: Test ECR access
+#        run: |
+#          echo "Testing login to AWS ECR..."
+#          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 381492032953.dkr.ecr.us-west-2.amazonaws.com
+#
+#
+#      - name: build docker image and push it gcr
+#        run: |
+#          ls -ll
+#          docker build -t demo-k3s-argo-paratech .
+#          docker tag demo-k3s-argo-paratech:latest 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
+#          docker push 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech:${{env.branch_name}}-${{env.full_sha}}
+#
+#
 
 #    IMAGE_TAG=${{ env.branch_name }}-${{ env.full_sha }}
 #    CHART_PATH=helm/demo-k3s-argo-paratech   # adjust path if needed
@@ -58,7 +58,7 @@ jobs:
 #    sed -i "s|repository: .*|repository: 381492032953.dkr.ecr.us-west-2.amazonaws.com/demo-k3s-argo-paratech|g" $CHART_PATH/values.yaml
 #    sed -i "s|tag: .*|tag: $IMAGE_TAG|g" $CHART_PATH/values.yaml
   update_helm:
-    needs: build_docker_image
+#    needs: build_docker_image
     runs-on: ubuntu-latest
     steps:
         ############ checkout the code ######################
